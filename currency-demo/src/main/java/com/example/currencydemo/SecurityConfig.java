@@ -30,10 +30,10 @@ public class SecurityConfig {
     @Configuration
     public static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-        private final UserDetailsService userDetailsService;
+        private final CustomUserDetailsService userDetailsService;
         private final PasswordEncoder passwordEncoder;
 
-        public WebSecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        public WebSecurityConfig(CustomUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
             this.userDetailsService = userDetailsService;
             this.passwordEncoder = passwordEncoder;
         }
@@ -47,7 +47,8 @@ public class SecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                .antMatchers("/message").authenticated()
+                .antMatchers("/convert-rates").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .headers().frameOptions().disable()
                 .and()

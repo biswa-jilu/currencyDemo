@@ -29,18 +29,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        // Check if the password is encoded with BCrypt
-        if (!passwordEncoder.matches("userpassword", user.getPassword())) {
-            // If not, update the password
-            String upgradedPassword = passwordEncoder.encode("userpassword");
-            user.setPassword(upgradedPassword);
-            userRepository.save(user);
-        }
-        
-        
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
+                .passwordEncoder(passwordEncoder::encode)
                 .roles("USER")
                 .build();
     }
